@@ -73,10 +73,10 @@ starting_verse_number = random.randint(1, 997)
 
 
 #sent your prompt with all variables 
-gpt_prompt = "Generate " + str(number_verses) + " numbered verses about " \
-        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " + favorite_thing \
-        + " in each verse. Don't use the word God or Lord. Start with verse number " \
-        + str(starting_verse_number) + " and count up."
+gpt_prompt = "Create a story with " + str(number_verses) + " sentences about John " \
+        + favorite_thing + " and " + theme \
+        + ". Be overly descriptive or flowery in each sentence. Output should be in an ordered list, starting with number " \
+        + str(starting_verse_number)
 
 print(gpt_prompt)
 
