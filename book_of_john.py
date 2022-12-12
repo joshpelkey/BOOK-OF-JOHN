@@ -249,7 +249,6 @@ url = extractor.find_urls(imgur_str)
 print(chat_response)
 print(dalle_response)
 print(slack_response)
-                                                                                                                                                              163,1         Bot
 clean_url = url[0][:-4]
 
 
@@ -261,8 +260,6 @@ slack_response = client.send(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                                                                                                                                                              1,1           Top
-
             },
             "image_url": clean_url,
             "alt_text": "[ THE BOOK OF JOHN || " + theme + " ]"
@@ -273,9 +270,7 @@ slack_response = client.send(
 print(chat_response)
 print(dalle_response)
 print(slack_response)
-                                                                                                                                                              163,1         Bot
 clean_url = url[0][:-4]
-
 
 # Send the response to the incoming Slack webhook
 slack_response = client.send(
