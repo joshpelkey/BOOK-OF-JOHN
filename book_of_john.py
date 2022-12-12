@@ -74,7 +74,8 @@ starting_verse_number = random.randint(1, 997)
 
 #sent your prompt with all variables 
 gpt_prompt = "Generate " + str(number_verses) + " numbered verses about " \
-        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " + favorite_thing + " in each verse. Don't use the word God or Lord. Start with verse number " \
+        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " + favorite_thing \
+        + " in each verse. Don't use the word God or Lord. Start with verse number " \
         + str(starting_verse_number) + " and count up."
 
 print(gpt_prompt)
@@ -196,7 +197,8 @@ starting_verse_number = random.randint(1, 997)
 
 #sent your prompt with all variables 
 gpt_prompt = "Generate " + str(number_verses) + " numbered verses about " \
-        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " + favorite_thing + " in each verse. Don't use the word God or Lord. Start with verse number " \
+        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " \
+        + favorite_thing + " in each verse. Don't use the word God or Lord. Start with verse number " \
         + str(starting_verse_number) + " and count up."
 
 print(gpt_prompt)
@@ -287,7 +289,8 @@ slack_response = client.send(
             "type": "context",
             "elements": [
                 {
-                    "text": theme + " | _Chapter " + str(favorite_thing_number + 1) + " | Verses " + str(starting_verse_number) + "-" + str(starting_verse_number + (number_verses-1)) + "_",
+                    "text": theme + " | _Chapter " + str(favorite_thing_number + 1) + " | Verses " + str(starting_verse_number) \
+                                    + "-" + str(starting_verse_number + (number_verses-1)) + "_",
                     "type": "mrkdwn"
                 }
             ]
