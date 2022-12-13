@@ -13,6 +13,9 @@ openai.api_key = "YOUR_KEY_HERE"
 # Create a Slack client
 client = WebhookClient("YOUR_URL_HERE")
 
+# ChatGPT temp
+temp = 0.9
+
 # get some cpu stats
 memory_percent = psutil.virtual_memory().percent
 cpu_percent = psutil.cpu_percent(interval=2)
@@ -28,43 +31,59 @@ uptime_seconds = math.floor(uptime)
 
 disk_usage = psutil.disk_usage("/")
 
+# Let's get a quote at random
+quote_topics = ["motivation", "leadership", "parenthood", "perserverance", "curiousity", "love", "life", "relationships", "family"]
+quote_topic = random.choice(quote_topics)
+quote = "Share a random quote about " + quote_topic + " and attribute its author"
+quote_response = openai.Completion.create(
+    engine="text-davinci-002",
+    prompt=quote,
+    temperature=temp,
+    max_tokens=1024
+)
+
+# List of topics
+topics = [    "Artificial intelligence",    "Robotics",    "Quantum computing",    "Biotechnology",    "Nanotechnology",    "Genetics",    "Data science",    "Machine learning",    "Energy technology",    "Space exploration",    "Solar power",    "Renewable energy",    "Environmental science",    "Climate change",    "Agriculture technology",    "Medical technology",    "Health informatics",    "Drug discovery and development",    "Neuroscience",    "Cancer research",    "Psychology",    "Geology",    "Meteorology",    "Astronomy",    "Astrophysics",    "Particle physics",    "Atomic physics",    "Chemistry",    "Materials science",    "Geochemistry",    "Oceanography",    "Environmental engineering",    "Electrical engineering",    "Mechanical engineering",    "Computer science",    "Cybersecurity",    "Internet of Things",    "Blockchain technology",    "Virtual reality",    "Augmented reality",    "3D printing",    "Transportation technology",    "Telecommunication",    "Drones",    "Television and video technology",    "Music technology",    "Video game technology",    "Film and movie technology",    "Photography technology",    "Design and architecture technology"]
+
+
+
 # let's do something different each day of the week
 day = datetime.datetime.now().weekday()
 
 if day == 0:
-    # today is monday 
-    # monday's are hard. work hard. let's start with something motivating
-    quote = "Share a motivational quote and attribute its author."
-    question = "Tell me an uplifting story about success that is non-fiction. Use 250 words or less."
+    # monday's are hard
+    # let's start the week with an important topic -- parenthood
+    quetion = "provide some reflective thoughts on parenthood or fatherhood and connect it to a human emotion, picked at random. Use around 250 words."
+    poem = "create a haiku about parenthood"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 
 elif day == 1:
-    # today is tuesday
-    # tuesday's are for getting shit done. more to come...
-    quote = "Share a quote about hard work and attribute its author."
-    question = "Tell me in 250 words about a person who has contributed greatly to society. What were their works? Use 250 words or less."
+    # tuesday's are for getting shit done
+    # let's learn about science and tech
+    science_topic = random.choice(topics)
+    question = "pick a complex topic from the area of " + science_topic + " and tell me about it in 250 words."
+    poem = "create a haiku about science and technology, particularly in the area of " + science_topic
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -73,20 +92,20 @@ elif day == 1:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 elif day == 2:
-    # today is wednesday
-    # wednesday's are also hard. perservere.
-    quote = "Share a quote about perserverance and attribute its author."
-    question = "Tell me about a complex topic but explain it in simple terms."
+    # wednesday's ... keep going baby
+    # how about we do a little money talk
+    question = "tell me about a random topic on finance and connect to a historical event. Use around 250 words."
+    poem = "create a haiku about money"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -95,20 +114,20 @@ elif day == 2:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 elif day == 3:
-    # today is thursday
-    # on thursday, there is light
-    quote = "Share a inspirational quote and attribute its author."
-    question = "Give me some good advice on raising a son, as a father. Use 250 words or less."
+    # thursday's we see the light
+    # let's get some fun stuff going
+    question = "pick a random book chapter from The Wheel of Time series and give me a summary. Tell me the book and chapter you have picked. Use around 250 words."
+    poem = "create a haiku about fantasy or sci-fi"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -117,20 +136,20 @@ elif day == 3:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 elif day == 4:
-    # today is friday
-    # friday funday
-    quote = "Share a quote about enjoying life and attribute its author."
-    question = "Tell me a neat fact about something in the music industry. Use 250 words or less."
+    # friday baby
+    # let's talk music
+    question = "pick a random topic from the area of music. it can be music theory, a song, an artist, a concert -- really anything related to music. Give me a summary about the topic in around 250 words."
+    poem = "create a haiku poem about music"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -139,20 +158,19 @@ elif day == 4:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 elif day == 5:
-    # today is saturday 
-    # saturdays are boss
-    quote = "Share a quote about leadership and attribute its author."
-    question = "Tell me about an interesting but lesser-known hobby or sport in 250 words or less."
+    # saturday -- FOOTBAWW
+    quetion = "pick 5 random stats about college football and tell me about them. Use around 250 words."
+    poem = "create a haiku about clemson university"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -161,20 +179,19 @@ elif day == 5:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 elif day == 6:
-    # today is sunday 
-    # sundays are for rest and reset
-    quote = "Share a quote about love and attribute its author."
-    question = "Give me some life advice, in particular about raising daughters."
+    # sunday -- a day of rest
+    question = "Give me a bulleted summary of a book from the christian bible. Use around 250 words."
+    poem = "create a haiku about religon"
 
     # Ask ChatGPT your question
-    quote_response = openai.Completion.create(
+    poem_response = openai.Completion.create(
         engine="text-davinci-002",
-        prompt=quote,
-        temperature=0.5,
+        prompt=poem,
+        temperature=temp,
         max_tokens=1024
     )
 
@@ -183,11 +200,11 @@ elif day == 6:
     question_response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=question,
-        temperature=0.5,
+        temperature=temp,
         max_tokens=1024
     )
 else:
-    quote_response = 'error yo'
+    poem_response = 'error yo'
     question_response = 'error yo'
 
 
@@ -220,6 +237,18 @@ slack_response = client.send(
                 "type": "mrkdwn",
                 "text": question_response["choices"][0]["text"]
             }
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "text": poem_response["choices"][0]["text"],
+                    "type": "mrkdwn"
+                }
+            ]
         },
         {
             "type": "divider"
