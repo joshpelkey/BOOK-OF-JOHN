@@ -11,7 +11,9 @@ from slack_sdk.webhook import WebhookClient
 openai.api_key = "YOUR_KEY_HERE"
 
 # Create a Slack client
-client = WebhookClient("YOUR_URL_HERE")
+client = WebhookClient(
+    "YOUR_URL_HERE"
+)
 
 # ChatGPT temp
 temp = 0.9
@@ -31,20 +33,91 @@ uptime_seconds = math.floor(uptime)
 
 disk_usage = psutil.disk_usage("/")
 
-# Let's get a quote at random
-quote_topics = ["motivation", "leadership", "parenthood", "perserverance", "curiousity", "love", "life", "relationships", "family"]
+# some topics to choose from for topline quote
+quote_topics = [
+    "motivation",
+    "leadership",
+    "parenthood",
+    "perserverance",
+    "curiousity",
+    "love",
+    "life",
+    "relationships",
+    "family",
+    "happiness",
+    "friendship",
+    "success",
+    "courage",
+    "inspiration",
+    "happiness",
+    "gratitude",
+    "hope",
+    "change",
+    "beauty",
+    "resilience",
+    "kindness",
+]
+
+# pick a random quote topic
 quote_topic = random.choice(quote_topics)
 quote = "Share a random quote about " + quote_topic + " and attribute its author"
 quote_response = openai.Completion.create(
-    engine="text-davinci-002",
-    prompt=quote,
-    temperature=temp,
-    max_tokens=1024
+    engine="text-davinci-002", prompt=quote, temperature=temp, max_tokens=1024
 )
 
-# List of topics
-topics = [    "Artificial intelligence",    "Robotics",    "Quantum computing",    "Biotechnology",    "Nanotechnology",    "Genetics",    "Data science",    "Machine learning",    "Energy technology",    "Space exploration",    "Solar power",    "Renewable energy",    "Environmental science",    "Climate change",    "Agriculture technology",    "Medical technology",    "Health informatics",    "Drug discovery and development",    "Neuroscience",    "Cancer research",    "Psychology",    "Geology",    "Meteorology",    "Astronomy",    "Astrophysics",    "Particle physics",    "Atomic physics",    "Chemistry",    "Materials science",    "Geochemistry",    "Oceanography",    "Environmental engineering",    "Electrical engineering",    "Mechanical engineering",    "Computer science",    "Cybersecurity",    "Internet of Things",    "Blockchain technology",    "Virtual reality",    "Augmented reality",    "3D printing",    "Transportation technology",    "Telecommunication",    "Drones",    "Television and video technology",    "Music technology",    "Video game technology",    "Film and movie technology",    "Photography technology",    "Design and architecture technology"]
-
+# List of topics for daily
+topics = [
+    "Artificial intelligence",
+    "Robotics",
+    "Quantum computing",
+    "Biotechnology",
+    "Nanotechnology",
+    "Genetics",
+    "Data science",
+    "Machine learning",
+    "Energy technology",
+    "Space exploration",
+    "Solar power",
+    "Renewable energy",
+    "Environmental science",
+    "Climate change",
+    "Agriculture technology",
+    "Medical technology",
+    "Health informatics",
+    "Drug discovery and development",
+    "Neuroscience",
+    "Cancer research",
+    "Psychology",
+    "Geology",
+    "Meteorology",
+    "Astronomy",
+    "Astrophysics",
+    "Particle physics",
+    "Atomic physics",
+    "Chemistry",
+    "Materials science",
+    "Geochemistry",
+    "Oceanography",
+    "Environmental engineering",
+    "Electrical engineering",
+    "Mechanical engineering",
+    "Computer science",
+    "Cybersecurity",
+    "Internet of Things",
+    "Blockchain technology",
+    "Virtual reality",
+    "Augmented reality",
+    "3D printing",
+    "Transportation technology",
+    "Telecommunication",
+    "Drones",
+    "Television and video technology",
+    "Music technology",
+    "Video game technology",
+    "Film and movie technology",
+    "Photography technology",
+    "Design and architecture technology",
+]
 
 
 # let's do something different each day of the week
@@ -53,47 +126,41 @@ day = datetime.datetime.now().weekday()
 if day == 0:
     # monday's are hard
     # let's start the week with an important topic -- parenthood
-    quetion = "provide some reflective thoughts on parenthood or fatherhood and connect it to a human emotion, picked at random. Use around 250 words."
+    question = "provide some reflective thoughts on parenthood or fatherhood and connect it to a human emotion, picked at random. Use around 250 words."
     poem = "create a haiku about parenthood"
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 
-elif day == 1:
+    elif day == 1:
     # tuesday's are for getting shit done
     # let's learn about science and tech
     science_topic = random.choice(topics)
-    question = "pick a complex topic from the area of " + science_topic + " and tell me about it in 250 words."
-    poem = "create a haiku about science and technology, particularly in the area of " + science_topic
+    question = (
+        "pick a complex topic from the area of "
+        + science_topic
+        + " and tell me about it in 250 words."
+    )
+    poem = (
+        "create a haiku about science and technology, particularly in the area of "
+        + science_topic
+    )
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 elif day == 2:
     # wednesday's ... keep going baby
@@ -103,19 +170,12 @@ elif day == 2:
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 elif day == 3:
     # thursday's we see the light
@@ -125,19 +185,12 @@ elif day == 3:
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 elif day == 4:
     # friday baby
@@ -147,40 +200,26 @@ elif day == 4:
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 elif day == 5:
     # saturday -- FOOTBAWW
-    quetion = "pick 5 random stats about college football and tell me about them. Use around 250 words."
+    question = "pick 5 random stats about college football and tell me about them. Use around 250 words."
     poem = "create a haiku about clemson university"
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 elif day == 6:
     # sunday -- a day of rest
@@ -189,24 +228,16 @@ elif day == 6:
 
     # Ask ChatGPT your question
     poem_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=poem,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=poem, temperature=temp, max_tokens=1024
     )
-
 
     # Ask ChatGPT your question
     question_response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt=question,
-        temperature=temp,
-        max_tokens=1024
+        engine="text-davinci-002", prompt=question, temperature=temp, max_tokens=1024
     )
 else:
-    poem_response = 'error yo'
-    question_response = 'error yo'
-
+    poem_response = "error yo"
+    question_response = "error yo"
 
 # Send the response to the incoming Slack webhook
 slack_response = client.send(
@@ -216,56 +247,50 @@ slack_response = client.send(
             "type": "header",
             "text": {
                 "type": "plain_text",
-                "text": ":robot_face: :game_die:  Good Morning Mr. Pelkey  :game_die: :robot_face:"
-            }
+                "text": ":robot_face: :game_die:  Good Morning Mr. Pelkey  :game_die: :robot_face:",
+            },
         },
         {
             "type": "context",
             "elements": [
-                {
-                    "type": "mrkdwn",
-                    "text": quote_response["choices"][0]["text"]
-                }
-            ]
+                {"type": "mrkdwn", "text": quote_response["choices"][0]["text"]}
+            ],
         },
-        {
-            "type": "divider"
-        },
+        {"type": "divider"},
         {
             "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": question_response["choices"][0]["text"]
-            }
+            "text": {"type": "mrkdwn", "text": question_response["choices"][0]["text"]},
         },
+        {"type": "divider"},
         {
-            "type": "divider"
+            "type": "context",
+            "elements": [
+                {"text": poem_response["choices"][0]["text"], "type": "mrkdwn"}
+            ],
         },
+        {"type": "divider"},
         {
             "type": "context",
             "elements": [
                 {
-                    "text": poem_response["choices"][0]["text"],
-                    "type": "mrkdwn"
+                    "text": "_I have been alive for "
+                    + str(uptime_days)
+                    + " days, "
+                    + str(uptime_hours)
+                    + " hours, "
+                    + str(uptime_minutes)
+                    + " minutes, and "
+                    + str(uptime_seconds)
+                    + " seconds || "
+                    + str(cpu_percent)
+                    + "% cpu || "
+                    + str(memory_percent)
+                    + "% ram || "
+                    + str(disk_usage.percent)
+                    + "% disk_",
+                    "type": "mrkdwn",
                 }
-            ]
+            ],
         },
-        {
-            "type": "divider"
-        },
-        {
-            "type": "context",
-            "elements": [
-                {
-                    "text": "_I have been alive for " + str(uptime_days) + " days, " \
-                            + str(uptime_hours) + " hours, " + str(uptime_minutes) \
-                            + " minutes, and " + str(uptime_seconds) + " seconds || " \
-                            + str(cpu_percent) + "% cpu || " \
-                            + str(memory_percent) + "% ram || " \
-                            + str(disk_usage.percent) + "% disk_",
-                    "type": "mrkdwn"
-                }
-            ]
-        }
-    ]
-)
+    ],
+)    
