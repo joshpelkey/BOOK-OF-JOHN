@@ -1,3 +1,4 @@
+# Import the necessary package
 import random
 import openai
 from slack_sdk.webhook import WebhookClient
@@ -9,313 +10,259 @@ from urlextract import URLExtract
 # Authenticate with OpenAI using your API key
 openai.api_key = "YOUR_KEY_HERE"
 
-# Create a Slack client
+# ai_stories slack
+client = WebhookClient(
+    "YOUR_URL_HERE"
+)
 
-#ai_stories
-client = WebhookClient("YOUR_HOOK_HERE")
+# me slack
+#client = WebhookClient(
+#    "YOUR_URL_HERE"
+#)
 
 # variables for our book
-book_title = "Book of John"
-emotions = ["Love", "Joy", "Anger",
-            "Sadness", "Fear", "Surprise",
-            "Disgust", "Envy", "Hope", "Hurt",
-            "Shame", "Guilt", "Pride", "Desire",
-            "Nostalgia", "Excitement", "Loneliness",
-            "Jealousy", "Contentment", "Satisfaction"]
-favorite_things = ["drinking whiskey",
-                    "playing golf",
-                    "gambling",
-                    "watching sports",
-                    "playing blackjack",
-                    "throwing dice",
-                    "delivering packages",
-                    "making cocktails",
-                    "drinking beers",
-                    "enjoying craft beer",
-                    "crypto",
-                    "shitcoins",
-                    "telling long stories",
-                    "gaming the stock market",
-                    "playing old nintendo games",
-                    "jumping on the trampoline",
-                    "being shirtless",
-                    "smoking weed",
-                    "slaying a beast"]
+book_title = "The Books of John"
 
-# some safer searches for DALL-E, who seems to be picky
-favorite_things_safe = ["drinking",
-                    "playing golf",
-                    "sitting at a card table",
-                    "watching sports",
-                    "playing cards",
-                    "throwing dice",
-                    "delivering packages",
-                    "making drinks",
-                    "drinking",
-                    "drinking at a bar",
-                    "crypto",
-                    "penny stocks",
-                    "telling long stories",
-                    "gaming the stock market",
-                    "playing old nintendo games",
-                    "jumping on the trampoline",
-                    "being shirtless",
-                    "smoking",
-                    "hunting"]
+emotions = [
+    "love",
+    "joy",
+    "anger",
+    "sadness",
+    "fear",
+    "surprise",
+    "disgust",
+    "envy",
+    "hope",
+    "hurt",
+    "shame",
+    "guilt",
+    "pride",
+    "desire",
+    "nostalgia",
+    "excitement",
+    "loneliness",
+    "jealousy",
+    "contentment",
+    "satisfaction",
+    "loathing",
+]
+
+activities_list = [
+    {
+        "activity": "drinking whiskey",
+        "dall_e": "drinking whiskey",
+        "chapter_title": "Whiskey",
+    },
+    {
+        "activity": "playing golf",
+        "dall_e": "playing golf",
+        "chapter_title": "Tee Time",
+    },
+    {
+        "activity": "gambling",
+        "dall_e": "sitting at a card table",
+        "chapter_title": "Mathematics",
+    },
+    {
+        "activity": "watching sports",
+        "dall_e": "watching sports",
+        "chapter_title": "The Sport",
+    },
+    {
+        "activity": "playing blackjack",
+        "dall_e": "playing cards",
+        "chapter_title": "Counting Cards",
+    },
+    {
+        "activity": "throwing dice",
+        "dall_e": "throwing dice",
+        "chapter_title": "7 out 7",
+    },
+    {
+        "activity": "delivering packages",
+        "dall_e": "delivering packages",
+        "chapter_title": "Kama Sutra",
+    },
+    {
+        "activity": "making cocktails",
+        "dall_e": "making drinks",
+        "chapter_title": "Mixology",
+    },
+    {
+        "activity": "drinking beers",
+        "dall_e": "drinking",
+        "chapter_title": "Drinking, Part 2",
+    },
+    {
+        "activity": "enjoying craft beer",
+        "dall_e": "drinking at a bar",
+        "chapter_title": "Fancy Drink",
+    },
+    {
+        "activity": "crypto",
+        "dall_e": "crypto",
+        "chapter_title": "Examination of Cryptocurrency Microeconomics",
+    },
+    {
+        "activity": "shitcoins",
+        "dall_e": "toilet paper",
+        "chapter_title": "Popular Ponzis",
+    },
+    {
+        "activity": "telling long stories",
+        "dall_e": "telling long stories",
+        "chapter_title": "The Art of Word",
+    },
+    {
+        "activity": "gaming the stock market",
+        "dall_e": "investing in stocks",
+        "chapter_title": "Stonks",
+    },
+    {
+        "activity": "playing old nintendo games",
+        "dall_e": "playing old nintendo games",
+        "chapter_title": "8-bit Adventures",
+    },
+    {
+        "activity": "jumping on the trampoline",
+        "dall_e": "jumping on the trampoline",
+        "chapter_title": "The Dangers of Childhood",
+    },
+    {
+        "activity": "being shirtless",
+        "dall_e": "being shirtless",
+        "chapter_title": "FREEDOM",
+    },
+    {
+        "activity": "smoking weed",
+        "dall_e": "smoking",
+        "chapter_title": "Alt Up",
+    },
+    {
+        "activity": "slaying a beast",
+        "dall_e": "hunting",
+        "chapter_title": "The Great Hunt",
+    },
+]
+
 
 # pick a randoms
 theme = random.choice(emotions)
-favorite_thing_number = random.randint(0,18)  # i store this to use as the book chapter number in the output
-favorite_thing = favorite_things[favorite_thing_number]
-favorite_thing_safe = favorite_things_safe[favorite_thing_number]
-number_verses = 3
+
+activity_number = random.randint(
+    0,
+    len(activities_list) - 1
+)
+
+activity_dict = activities_list[activity_number]
+number_verses = random.randint(3, 7)
 starting_verse_number = random.randint(1, 997)
 
 
-#sent your prompt with all variables 
-gpt_prompt = "Create a story with " + str(number_verses) + " sentences about John " \
-        + favorite_thing + " and " + theme \
-        + ". Be overly descriptive or flowery in each sentence. Output should be in an ordered list, starting with number " \
-        + str(starting_verse_number)
+# sent your prompt with all variables
+gpt_prompt = (
+    "Create a story with "
+    + str(number_verses)
+    + " sentences about John "
+    + activity_dict["activity"]
+    + " and "
+    + theme
+    + ". Be overly descriptive or flowery in each sentence. Start each sentenace with a number, starting with "
+    + str(starting_verse_number)
+    + ". For example, "
+    + str(starting_verse_number)
+    + ": First sentence goes here."
+)
 
 print(gpt_prompt)
 
 # Ask ChatGPT your question
 chat_response = openai.Completion.create(
-    engine="text-davinci-002",
-    prompt=gpt_prompt,
-    temperature=0.5,
-    max_tokens=1024
+    engine="text-davinci-002", prompt=gpt_prompt, temperature=0.5, max_tokens=1024
 )
 
 # DALL-E prompt
-dalle_prompt = "a neoclassical painting of " + favorite_thing_safe + " and " + theme
+dalle_prompt = "a neoclassical painting of " + activity_dict["dall_e"] + " and " + theme
 
 # generate a dope DALL-E image
-dalle_response = openai.Image.create(
-  prompt = dalle_prompt,
-  size="256x256"
-)
-image_url = dalle_response['data'][0]['url']
+dalle_response = openai.Image.create(prompt=dalle_prompt, size="256x256")
+image_url = dalle_response["data"][0]["url"]
 
 # get the image and store it on imgur
 img_data = requests.get(image_url).content
-with open('book_of_john.jpg', 'wb') as handler:
+with open("book_of_john.jpg", "wb") as handler:
     handler.write(img_data)
 
-imgur = subprocess.run(['imgur-uploader', 'book_of_john.jpg'], stdout=subprocess.PIPE)
+imgur = subprocess.run(
+    ["/home/moridin/.local/bin/imgur-uploader", "book_of_john.jpg"],
+    stdout=subprocess.PIPE,
+)
 
 extractor = URLExtract()
 imgur_str = str(imgur)
 url = extractor.find_urls(imgur_str)
 
-                "text": chat_response["choices"][0]["text"] 
-            }
-        },
-        {
-            "type": "image",
-            "title": {
-                "type": "plain_text",
-                "text": "[" + theme + "]",
-                "emoji": True# Import the necessary package
-import random
-import openai
-from slack_sdk.webhook import WebhookClient
-import requests
-import subprocess
-from urlextract import URLExtract
-
-
-# Authenticate with OpenAI using your API key
-openai.api_key = "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"
-
-# Create a Slack client
-
-#ai_stories
-client = WebhookClient("https://hooks.slack.com/services/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")
-
-# me
-#client = WebhookClient("https://hooks.slack.com/services/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")
-
-# variables for our book
-book_title = "Book of John"
-emotions = ["Love", "Joy", "Anger",
-            "Sadness", "Fear", "Surprise",
-            "Disgust", "Envy", "Hope", "Hurt",
-            "Shame", "Guilt", "Pride", "Desire",
-            "Nostalgia", "Excitement", "Loneliness",
-            "Jealousy", "Contentment", "Satisfaction"]
-favorite_things = ["drinking whiskey",
-                    "playing golf",
-                    "gambling",
-                    "watching sports",
-                    "playing blackjack",
-                    "throwing dice",
-                    "delivering packages",
-                    "making cocktails",
-                    "drinking beers",
-                    "enjoying craft beer",
-                    "crypto",
-                    "shitcoins",
-                    "telling long stories",
-                    "gaming the stock market",
-                    "playing old nintendo games",
-                    "jumping on the trampoline",
-                    "being shirtless",
-                    "smoking weed",
-                    "slaying a beast"]
-
-# some safer searches for DALL-E, who seems to be picky
-favorite_things_safe = ["drinking",
-                    "playing golf",
-                    "sitting at a card table",
-                    "watching sports",
-                    "playing cards",
-                    "throwing dice",
-                    "delivering packages",
-                    "making drinks",
-                    "drinking",
-                    "drinking at a bar",
-                    "crypto",
-                    "penny stocks",
-                    "telling long stories",
-                    "gaming the stock market",
-                    "playing old nintendo games",
-                    "jumping on the trampoline",
-                    "being shirtless",
-                    "smoking",
-                    "hunting"]
-
-# pick a randoms
-theme = random.choice(emotions)
-favorite_thing_number = random.randint(0,18)  # i store this to use as the book chapter number in the output
-favorite_thing = favorite_things[favorite_thing_number]
-favorite_thing_safe = favorite_things_safe[favorite_thing_number]
-number_verses = 3
-starting_verse_number = random.randint(1, 997)
-
-
-#sent your prompt with all variables 
-gpt_prompt = "Generate " + str(number_verses) + " numbered verses about " \
-        + favorite_thing + ". Make the tone of the verses about " + theme + ". Use the word or phrase " \
-        + favorite_thing + " in each verse. Don't use the word God or Lord. Start with verse number " \
-        + str(starting_verse_number) + " and count up."
-
-print(gpt_prompt)
-
-# Ask ChatGPT your question
-chat_response = openai.Completion.create(
-    engine="text-davinci-002",
-    prompt=gpt_prompt,
-    temperature=0.5,
-    max_tokens=1024
-)
-
-# DALL-E prompt
-dalle_prompt = "a neoclassical painting of " + favorite_thing_safe + " and " + theme
-
-# generate a dope DALL-E image
-dalle_response = openai.Image.create(
-  prompt = dalle_prompt,
-  size="256x256"
-)
-image_url = dalle_response['data'][0]['url']
-
-# get the image and store it on imgur
-img_data = requests.get(image_url).content
-with open('book_of_john.jpg', 'wb') as handler:
-    handler.write(img_data)
-
-imgur = subprocess.run(['imgur-uploader', 'book_of_john.jpg'], stdout=subprocess.PIPE)
-
-extractor = URLExtract()
-imgur_str = str(imgur)
-url = extractor.find_urls(imgur_str)
-
-                "text": chat_response["choices"][0]["text"] 
-            }
-        },
-        {
-            "type": "image",
-            "title": {
-                "type": "plain_text",
-                "text": "[" + theme + "]",
-                "emoji": True
-            },
-            "image_url": clean_url,
-            "alt_text": "[ THE BOOK OF JOHN || " + theme + " ]"
-        }
-    ]
-)
-
-print(chat_response)
-print(dalle_response)
-print(slack_response)
 clean_url = url[0][:-4]
 
 
 # Send the response to the incoming Slack webhook
 slack_response = client.send(
-    text="fallback",
+    text="a daily reading from THE BOOKS OF JOHN...",
     blocks=[
         {
             "type": "header",
             "text": {
                 "type": "plain_text",
+                "text": ":game_die: :beer: :game_die:  The Books of John  :game_die: :beer: :game_die:",
             },
-            "image_url": clean_url,
-            "alt_text": "[ THE BOOK OF JOHN || " + theme + " ]"
-        }
-    ]
-)
-
-print(chat_response)
-print(dalle_response)
-print(slack_response)
-clean_url = url[0][:-4]
-
-# Send the response to the incoming Slack webhook
-slack_response = client.send(
-    text="fallback",
-    blocks=[
-        {
-            "type": "header",
-            "text": {
-                "type": "plain_text",
-                "text": ":game_die: :beer: :game_die:  The Book of John  :game_die: :beer: :game_die:"
-            }
         },
         {
             "type": "context",
             "elements": [
                 {
-                    "text": theme + " | _Chapter " + str(favorite_thing_number + 1) + " | Verses " + str(starting_verse_number) \
-                                    + "-" + str(starting_verse_number + (number_verses-1)) + "_",
-                    "type": "mrkdwn"
+                    "text": "Book of "
+                    + theme.capitalize()
+                    + " | _Chapter "
+                    + str(activity_number + 1)
+                    + ": "
+                    + activity_dict['chapter_title']
+                    + " | Verses "
+                    + str(starting_verse_number)
+                    + "-"
+                    + str(starting_verse_number + (number_verses - 1))
+                    + "_",
+                    "type": "mrkdwn",
                 }
-            ]
+            ],
         },
-        {
-            "type": "divider"
-        },
+        {"type": "divider"},
         {
             "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": chat_response["choices"][0]["text"]
-            }
+            "text": {"type": "mrkdwn", "text": chat_response["choices"][0]["text"]},
         },
         {
             "type": "image",
             "title": {
                 "type": "plain_text",
-                "text": "[" + theme + "]",
-                "emoji": True
+                "text": "["
+                + theme.capitalize()
+                + " - Chapter "
+                + str(activity_number + 1)
+                + ": "
+                + activity_dict["chapter_title"]
+                + "]",
+                "emoji": True,
             },
             "image_url": clean_url,
-            "alt_text": "[ THE BOOK OF JOHN || " + theme + " ]"
-        }
-    ]
+            "alt_text": "[ THE BOOKS OF JOHN || "
+            + theme.capitalize()
+            + " - Chapter "
+            + str(activity_number + 1)
+            + ": "
+            + activity_dict["chapter_title"]
+            + " ]",
+        },
+    ],
 )
 
 print(chat_response)
