@@ -192,7 +192,7 @@ image_url = dalle_response["data"][0]["url"]
 
 # get the image and store it on imgur
 img_data = requests.get(image_url).content
-with open("/home/moridin/code/book_of_john/book_of_john.jpg", "wb") as handler:
+with open("/your_path/code/book_of_john/book_of_john.jpg", "wb") as handler:
     handler.write(img_data)
 
 imgur = subprocess.run(
