@@ -12,13 +12,8 @@ openai.api_key = "YOUR_KEY_HERE"
 
 # ai_stories slack
 client = WebhookClient(
-    "YOUR_URL_HERE"
+    "YOUR_HOOK_HERE"
 )
-
-# me slack
-#client = WebhookClient(
-#    "YOUR_URL_HERE"
-#)
 
 # variables for our book
 book_title = "The Books of John"
@@ -45,6 +40,7 @@ emotions = [
     "contentment",
     "satisfaction",
     "loathing",
+    "despair",
 ]
 
 activities_list = [
@@ -59,7 +55,7 @@ activities_list = [
         "chapter_title": "Tee Time",
     },
     {
-        "activity": "gambling",
+        "activity": "gambling at the casino",
         "dall_e": "sitting at a card table",
         "chapter_title": "Mathematics",
     },
@@ -76,7 +72,7 @@ activities_list = [
     {
         "activity": "throwing dice",
         "dall_e": "throwing dice",
-        "chapter_title": "7 out 7",
+        "chapter_title": "Come 69",
     },
     {
         "activity": "delivering packages",
@@ -85,7 +81,7 @@ activities_list = [
     },
     {
         "activity": "making cocktails",
-        "dall_e": "making drinks",
+        "dall_e": "mixing drinks",
         "chapter_title": "Mixology",
     },
     {
@@ -99,23 +95,23 @@ activities_list = [
         "chapter_title": "Fancy Drink",
     },
     {
-        "activity": "crypto",
-        "dall_e": "crypto",
+        "activity": "investing in cryptocurrency",
+        "dall_e": "cryptocurrency",
         "chapter_title": "Examination of Cryptocurrency Microeconomics",
     },
     {
-        "activity": "shitcoins",
-        "dall_e": "toilet paper",
-        "chapter_title": "Popular Ponzis",
+        "activity": "drinking wine",
+        "dall_e": "drinking wine",
+        "chapter_title": "Side Wine",
     },
     {
         "activity": "telling long stories",
         "dall_e": "telling long stories",
-        "chapter_title": "The Art of Word",
+        "chapter_title": "Word of Art",
     },
     {
         "activity": "gaming the stock market",
-        "dall_e": "investing in stocks",
+        "dall_e": "investing in the stock market",
         "chapter_title": "Stonks",
     },
     {
@@ -136,12 +132,17 @@ activities_list = [
     {
         "activity": "smoking weed",
         "dall_e": "smoking",
-        "chapter_title": "Alt Up",
+        "chapter_title": "At 30,000 Ft",
     },
     {
         "activity": "slaying a beast",
         "dall_e": "hunting",
         "chapter_title": "The Great Hunt",
+    },
+    {
+        "activity": "playing slot machines",
+        "dall_e": "slot machines",
+        "chapter_title": "Grinding",
     },
 ]
 
@@ -156,33 +157,34 @@ activity_number = random.randint(
 
 activity_dict = activities_list[activity_number]
 number_verses = random.randint(3, 7)
-starting_verse_number = random.randint(1, 997)
+starting_verse_number = random.randint(1, 993)
 
-
-# sent your prompt with all variables
+# set your prompt with all variables
 gpt_prompt = (
-    "Create a story with "
-    + str(number_verses)
-    + " sentences about John "
+    "Tell me a tale about John "
     + activity_dict["activity"]
     + " and "
     + theme
-    + ". Be overly descriptive or flowery in each sentence. Start each sentenace with a number, starting with "
+    + " in "
+    + str(number_verses)
+    + " sentences. "
+    + "Style the story in the voice of Al Capone. "
+    + "Number each sentence, starting with "
     + str(starting_verse_number)
     + ". For example, "
     + str(starting_verse_number)
-    + ": First sentence goes here."
+    + ": Your first sentence goes here, kid!"
 )
 
 print(gpt_prompt)
 
 # Ask ChatGPT your question
 chat_response = openai.Completion.create(
-    engine="text-davinci-002", prompt=gpt_prompt, temperature=0.5, max_tokens=1024
+    engine="text-davinci-003", prompt=gpt_prompt, temperature=0.5, max_tokens=2048
 )
 
 # DALL-E prompt
-dalle_prompt = "a neoclassical painting of " + activity_dict["dall_e"] + " and " + theme
+dalle_prompt = "a painting of " + activity_dict["dall_e"] + " with influence from a famous work about " + theme
 
 # generate a dope DALL-E image
 dalle_response = openai.Image.create(prompt=dalle_prompt, size="256x256")
@@ -190,11 +192,11 @@ image_url = dalle_response["data"][0]["url"]
 
 # get the image and store it on imgur
 img_data = requests.get(image_url).content
-with open("book_of_john.jpg", "wb") as handler:
+with open("/home/moridin/code/book_of_john/book_of_john.jpg", "wb") as handler:
     handler.write(img_data)
 
 imgur = subprocess.run(
-    ["/home/moridin/.local/bin/imgur-uploader", "book_of_john.jpg"],
+    ["/your_path/.local/bin/imgur-uploader", "/your_path/code/book_of_john/book_of_john.jpg"],
     stdout=subprocess.PIPE,
 )
 
@@ -233,16 +235,15 @@ slack_response = client.send(
                     + "_",
                     "type": "mrkdwn",
                 }
-            ],
-        },
-        {"type": "divider"},
-        {
-            "type": "section",
-            "text": {"type": "mrkdwn", "text": chat_response["choices"][0]["text"]},
-        },
-        {
-            "type": "image",
-            "title": {
+            ],       
+            {"type": "divider"},
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": chat_response["choices"][0]["text"]},
+            },
+            {
+                "type": "image",
+                "title": {
                 "type": "plain_text",
                 "text": "["
                 + theme.capitalize()
